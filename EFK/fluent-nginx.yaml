@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: flunet-nginx
+  namespace: efk
+spec: 
+  replicas: 3
+  selector: 
+    matchLabels:
+      app: flunet-nginx
+  template:
+    metadata: 
+      labels: 
+        app: flunet-nginx
+    spec: 
+      containers: 
+        - name: nginx
+          image: nginx
+          ports: 
+            - containerPort: 80
+              name: nginx-port
+          resources: 
+            requests: 
+              memory: 200M
+              cpu: 50m
+            limits:
+              memory: 300M
+              cpu: 150m
+          volumeMounts:
+            - name: nginx-log
+              mountPath: /var/log/nginx
+        - name: fluent
+          image: quay.io/fluentd_elasticsearch/fluentd:v2.7.0
+          env: 
+            - name:  FLUENT_ARGS
+              value: --no-supervisor -q
+          resources: 
+            limits: 
+              cpu: 300m
+              memory: 500M
+            requests:
+              cpu: 100m
+              memory: 200M
+          volumeMounts: 
+            - name: nginx-log
+              mountPath: /var/log/nginx
+            - name: fluent-cm
+              mountPath: /etc/fluent/config.d
+      volumes:
+        - name: nginx-log
+          emptyDir: {}
+        - name: fluent-cm
+          configMap: 
+            name: nginx-fluent-cm
+
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: nginx-svc
+  namespace: efk
+spec: 
+  selector:
+    app: flunet-nginx
+  ports: 
+    - port: 80
+      targetPort: nginx-port
+
