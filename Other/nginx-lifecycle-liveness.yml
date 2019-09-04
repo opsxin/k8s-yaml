@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: nginx
+  namespace: efk
+spec: 
+  replicas: 3
+  selector: 
+    matchLabels: 
+      app: test-nginx
+  template: 
+    metadata: 
+      labels: 
+        app: nginx 
+    spec: 
+      containers: 
+        - image: nginx
+          name: nginx 
+          resources: 
+            requests: 
+              memory: 100M
+              cpu: 30m
+            limits:
+              memory: 200M
+              cpu: 100m
+          lifecycle: 
+            preStop:
+              exec: 
+                command: ["/bin/sh", "-c", "nginx -s stop; while killall -0 nginx; do sleep 1; done"]
+          livenessProbe:
+            initialDelaySeconds: 20
+            tcpSocket: 
+              port: 80           
+  
