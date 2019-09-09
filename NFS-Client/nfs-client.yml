@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nfs-client-provisioner
+  name: nfs-client-provisioner
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+    spec:
+      containers:
+      - env:
+        - name: PROVISIONER_NAME
+          value: fuseim.pri/ifs
+        # 修改自己的 NFS Server
+        - name: NFS_SERVER
+          value: 10.140.0.15
+        # 修改自己的 NFS 路径
+        - name: NFS_PATH
+          value: /data/
+        image: quay.io/external_storage/nfs-client-provisioner:latest
+        imagePullPolicy: Always
+        name: nfs-client-provisioner
+        resources: {}
+        volumeMounts:
+        - mountPath: /persistentvolumes
+          name: nfs-client-root
+      serviceAccount: nfs-client-provisioner
+      serviceAccountName: nfs-client-provisioner
+      volumes:
+      - name: nfs-client-root
+        # 修改为自己的 NFS Server
+        nfs:
+          path: /data/
+          server: 10.140.0.15
