@@ -21,8 +21,15 @@
 │   └── nfs-test-pod.yml
 ├── Other
 │   └── nginx-lifecycle-liveness.yml
+├── Prometheus
+│   ├── grafana.yml
+│   ├── namespace-ingress-job.yml
+│   ├── prometheus.yml
+│   ├── rbac.yml
+│   └── redis-export
+│       └── redis-export.yml
 ├── README.md
 └── update-readme.sh
 
-4 directories, 19 files
+6 directories, 24 files
 ```
