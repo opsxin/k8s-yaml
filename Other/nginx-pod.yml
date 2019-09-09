@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: nginx-pod
+  namespace: k8s-yaml
+spec: 
+  containers: 
+    - name: nginx-pod
+      image: nginx
+      resources:  
+        requests: 
+          memory: 100M
+          cpu: 50m
+        limits:
+          memory: 200M
+          cpu: 100m
+        
