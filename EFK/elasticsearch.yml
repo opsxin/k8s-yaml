@@ -1,0 +1,119 @@
+# 创建单独的命名空间，便于管理
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: efk
+
+---
+# 创建 elasticsearch Service
+# 便于集群内访问
+# 同一命名空间：efk-svc
+# 不同命名空间：efk-svc.efk.svc.cluster.local
+apiVersion: v1
+kind: Service
+metadata:
+  name: efk-svc
+  namespace: efk
+spec:
+  selector:
+    app: elasticsearch
+  clusterIP: None
+  ports:
+    - port: 9200
+      name: rest-port
+    - port: 9300
+      name: inter-node
+
+---
+# 创建有状态的 Pod
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: es-cluster
+  namespace: efk
+spec:
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: elasticsearch
+  serviceName: efk-svc
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec:
+      containers:
+      - env:
+        - name: cluster.name
+          value: es-cluster
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        # es 集群主机
+        - name: discovery.seed_hosts
+          value: es-cluster-0.efk-svc,es-cluster-1.efk-svc,es-cluster-2.efk-svc
+        # master 主机初始化列表
+        - name: cluster.initial_master_nodes
+          value: es-cluster-0,es-cluster-1,es-cluster-2
+        - name: ES_JAVA_OPTS
+          value: -Xms512m -Xmx512m
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.3.1
+        imagePullPolicy: IfNotPresent
+        name: elasticsearch
+        ports:
+        - containerPort: 9200
+          name: rest-port
+        - containerPort: 9300
+          name: inter-node
+        resources:
+          limits:
+            cpu: 200m
+            memory: 1G
+          requests:
+            cpu: 100m
+            memory: 512M
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data
+          name: es-data
+      initContainers:
+      - command: ["sh", "-c", "chown -R 1000:1000 /usr/share/elasticsearch/data"]
+        image: busybox
+        imagePullPolicy: Always
+        name: fix-permissions
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data
+          name: es-data
+      - command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        image: busybox
+        imagePullPolicy: Always
+        name: increase-vm-max-map
+        securityContext:
+          privileged: true
+      - command: ["sh", "-c", "ulimit -n 65536"]
+        image: busybox
+        imagePullPolicy: Always
+        name: increase-fd-ulimit
+        securityContext:
+          privileged: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+  # 持续卷申明
+  # NFS-Client
+  volumeClaimTemplates:
+  - metadata:
+      annotations:
+        volume.beta.kubernetes.io/storage-class: managed-nfs-storage
+      labels:
+        app: elasticsearch
+      name: es-data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 200M

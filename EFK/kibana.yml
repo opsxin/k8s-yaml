@@ -1,0 +1,51 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: kibana
+  name: kibana
+  namespace: efk
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+      - env:
+        - name: ELASTICSEARCH_HOSTS
+          value: http://efk-svc:9200
+        image: docker.elastic.co/kibana/kibana:7.3.1
+        imagePullPolicy: IfNotPresent
+        name: kibana
+        ports:
+        - containerPort: 5601
+          name: kibana-port
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1G
+          requests:
+            cpu: 100m
+            memory: 200M
+
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: kibana-svc
+  namespace: efk 
+  labels: 
+    app: kibana
+spec: 
+  type: NodePort
+  ports: 
+    - port: 5601
+      targetPort: kibana-port
+  selector: 
+    app: kibana
