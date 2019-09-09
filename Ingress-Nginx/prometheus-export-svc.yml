@@ -1,0 +1,14 @@
+# 对 Prometheus 暴露 Mertic
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-prome-svc
+  namespace: ingress-nginx
+spec:
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+  ports:
+  - name: export-port
+    port: 10254
+    targetPort: 10254
