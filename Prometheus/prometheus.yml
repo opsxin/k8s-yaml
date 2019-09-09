@@ -1,0 +1,78 @@
+# PVC，配合 NFS-Client
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: prometheus
+  namespace: kube-prometheus
+  annotations: 
+    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
+spec:
+  accessModes: 
+    - ReadWriteMany
+  resources:
+    requests: 
+      storage: 200M
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-server
+  namespace: kube-prometheus
+spec:
+  selector:
+    matchLabels:
+      app: prometheus-server
+  template:
+    metadata:
+      labels:
+        app: prometheus-server
+    spec:
+      containers:
+      - name: prometheus-server
+        image: prom/prometheus
+        command:
+          - "/bin/prometheus"
+        args: 
+          - "--config.file=/etc/prometheus/prometheus.yml"
+          - "--storage.tsdb.path=/prometheus"
+          - "--storage.tsdb.retention=24h"
+          - "--web.enable-admin-api"  
+          - "--web.enable-lifecycle" 
+        resources:
+          limits:
+            memory: "500Mi"
+            cpu: "200m"
+          requests: 
+            memory: "200Mi"
+            cpu: "50m"
+        ports:
+        - containerPort: 9090
+          name: prome-port
+        volumeMounts:
+          - mountPath: "/prometheus"
+            subPath: prometheus01
+            name: data
+          - mountPath: "/etc/prometheus"
+            name: config 
+      volumes: 
+        - name: data
+          persistentVolumeClaim: 
+            claimName: prometheus 
+        - name: config
+          configMap: 
+            name: prometheus-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prome-svc
+  namespace: kube-prometheus
+spec:
+  selector:
+    app: prometheus-server
+  type: NodePort
+  ports:
+  - port: 9090
+    targetPort: prome-port

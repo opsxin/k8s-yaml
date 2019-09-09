@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-prome
+  namespace: kube-prometheus
+spec:
+  selector:
+    matchLabels:
+      app: redis-prome
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9121"
+      labels:
+        app: redis-prome
+    spec:
+      containers:
+      - name: redis-prome
+        image: redis 
+        resources:
+          limits:
+            memory: "100Mi"
+            cpu: "50m"
+          requests:
+            memory: "100Mi"
+            cpu: "10m"
+        ports:
+        - containerPort: 6379
+          name: redis-port
+      - name: redis-export
+        image: oliver006/redis_exporter
+        resources:
+          limits: 
+            memory: "100Mi"
+            cpu: "50m"
+          requests:
+            memory: "50Mi"
+            cpu: "10m"
+        ports:
+          - name: export-port
+            containerPort: 9121
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-prome-svc
+  namespace: kube-prometheus
+spec:
+  selector:
+    app: redis-prome
+  ports:
+  - port: 6379
+    targetPort: redis-port
+    name: redis-svc
+  - port: 9121
+    targetPort: export-port
+    name: export-svc

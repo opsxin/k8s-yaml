@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: grafana-pvc
+  namespace: kube-prometheus
+  annotations: 
+    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
+spec:
+  accessModes: 
+    - ReadWriteMany
+  resources:
+    requests: 
+      storage: 200M
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: kube-prometheus
+spec:
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana
+        resources:
+          limits:
+            memory: "128M"
+            cpu: "100m"
+          requests:
+            memory: "100M"
+            cpu: "50m"
+        env: 
+          - name: GF_SECURITY_ADMIN_USER
+            value: admin
+          - name: GF_SECURITY_ADMIN_PASSWORD
+            value: admin
+        ports:
+        - containerPort: 3000
+          name: grafana-port
+        readinessProbe:
+          failureThreshold: 10
+          httpGet: 
+            path: /api/health
+            port: grafana-port
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        livenessProbe: 
+          failureThreshold: 3
+          httpGet:
+            path: /api/health
+            port: grafana-port
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        volumeMounts:
+          - mountPath: /vat/lib/grafana
+            subPath: grafana
+            name: grafana-storage
+      volumes: 
+        - name: grafana-storage
+          persistentVolumeClaim:
+            claimName: grafana-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: kube-prometheus
+spec:
+  selector:
+    app: grafana
+  type: NodePort
+  ports:
+  - port: 3000
+    targetPort: grafana-port
