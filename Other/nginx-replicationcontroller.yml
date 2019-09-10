@@ -57,3 +57,18 @@ spec:
       volumes:
         - name: test
           emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: nginx-svc
+  namespace: k8s-yaml
+spec: 
+  selector: 
+    app: nginx
+  ports: 
+    - port: 80
+      targetPort: nginx-port
+  sessionAffinity: ClientIP  
+  
