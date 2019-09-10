@@ -24,6 +24,20 @@ spec:
         preStop: 
           exec: 
             command: ["sh", "-c", "nginx -s stop"]
+      readinessProbe:
+        initialDelaySeconds: 10
+        httpGet: 
+          path: "/"
+          port: nginx-port
+      livenessProbe:
+        initialDelaySeconds: 20
+        timeoutSeconds: 2
+        httpGet: 
+          path: "/"
+          port: nginx-port
+      ports: 
+        - name: nginx-port
+          containerPort: 80
   initContainers: 
     - name: init-html
       command: ["sh", "-c", "echo 'dsfdsf' >> /html/index.html"]
