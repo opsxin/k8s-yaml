@@ -3,6 +3,8 @@ kind: Pod
 metadata: 
   name: nginx-pod
   namespace: k8s-yaml
+  labels:
+    app: nginx-pod
 spec: 
   containers: 
     - name: nginx-pod
@@ -48,3 +50,16 @@ spec:
   volumes:
     - name: test
       emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: nginx-svc
+  namespace: k8s-yaml
+spec:
+  selector: 
+    app: nginx-pod
+  ports: 
+    - port: 80
+      targetPort: nginx-port
