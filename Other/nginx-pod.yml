@@ -17,6 +17,13 @@ spec:
       volumeMounts:
         - name: test
           mountPath: /usr/share/nginx/html
+      lifecycle:
+        postStart: 
+          exec: 
+            command: ["sh", "-c", "echo '1234'"]
+        preStop: 
+          exec: 
+            command: ["sh", "-c", "nginx -s stop"]
   initContainers: 
     - name: init-html
       command: ["sh", "-c", "echo 'dsfdsf' >> /html/index.html"]
