@@ -14,4 +14,16 @@ spec:
         limits:
           memory: 200M
           cpu: 100m
-        
+      volumeMounts:
+        - name: test
+          mountPath: /usr/share/nginx/html
+  initContainers: 
+    - name: init-html
+      command: ["sh", "-c", "echo 'dsfdsf' >> /html/index.html"]
+      image: busybox
+      volumeMounts:
+        - name: test
+          mountPath: /html
+  volumes:
+    - name: test
+      emptyDir: {}
