@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: nginx-pod
+  namespace: k8s-yaml
+  labels:
+    app: nginx-pod
+spec: 
+  containers: 
+    - name: nginx-pod
+      image: nginx
+      resources:  
+        requests: 
+          memory: 100M
+          cpu: 50m
+        limits:
+          memory: 200M
+          cpu: 100m
+      volumeMounts:
+        - name: test
+          mountPath: /usr/share/nginx/html
+      lifecycle:
+        postStart: 
+          exec: 
+            command: ["sh", "-c", "echo '1234'"]
+        preStop: 
+          exec: 
+            command: ["sh", "-c", "nginx -s stop"]
+      readinessProbe:
+        initialDelaySeconds: 10
+        httpGet: 
+          path: "/"
+          port: nginx-port
+      livenessProbe:
+        initialDelaySeconds: 20
+        timeoutSeconds: 2
+        httpGet: 
+          path: "/"
+          port: nginx-port
+      ports: 
+        - name: nginx-port
+          containerPort: 80
+  initContainers: 
+    - name: init-html
+      command: ["sh", "-c", "echo 'dsfdsf' >> /html/index.html"]
+      image: busybox
+      volumeMounts:
+        - name: test
+          mountPath: /html
+  volumes:
+    - name: test
+      emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: nginx-svc
+  namespace: k8s-yaml
+spec:
+  selector: 
+    app: nginx-pod
+  ports: 
+    - port: 80
+      targetPort: nginx-port
