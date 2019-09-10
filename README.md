@@ -20,7 +20,11 @@
 │   ├── nfs-storageclass.yml
 │   └── nfs-test-pod.yml
 ├── Other
-│   └── nginx-lifecycle-liveness.yml
+│   ├── nginx-daemonset.yml
+│   ├── nginx-deployment.yml
+│   ├── nginx-pod.yml
+│   ├── nginx-replicaset.yml
+│   └── nginx-replicationcontroller.yml
 ├── Prometheus
 │   ├── grafana.yml
 │   ├── namespace-ingress-job.yml
@@ -31,5 +35,5 @@
 ├── README.md
 └── update-readme.sh
 
-6 directories, 24 files
+6 directories, 28 files
 ```
