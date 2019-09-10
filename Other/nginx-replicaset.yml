@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: ReplicaSet
+metadata: 
+  name: nginx-rs
+  namespace: k8s-yaml
+spec: 
+  replicas: 3
+  selector: 
+    matchLabels:
+      app: nginx
+  template: 
+    metadata: 
+      name: nginx
+      labels: 
+        app: nginx
+    spec: 
+      containers: 
+        - name: nginx 
+          image: nginx 
+          ports: 
+            - name: nginx-port
+              containerPort: 80
+              
