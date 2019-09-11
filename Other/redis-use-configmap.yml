@@ -16,7 +16,9 @@ spec:
       containers: 
         - name: redis-cm
           image: redis
+          # 自定义 EntryPoint
           command: ["redis-server"]
+          # 自定义 Cmd，使用自己的配置文件
           args: ["/usr/local/etc/redis/redis.conf"]
           volumeMounts: 
             - name: config
