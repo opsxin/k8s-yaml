@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: 
+  name: nginx-sts
+  namespace: k8s-yaml
+spec:
+  serviceName: nginx-sts
+  replicas: 3
+  selector: 
+    matchLabels: 
+      app: nginx 
+  template: 
+    metadata: 
+      labels: 
+        app: nginx
+    spec: 
+      containers: 
+        - name: nginx 
+          image: nginx
+          volumeMounts:
+            - name: html
+              mountPath: /usr/share/nginx/html
+      initContainers:
+        - name: set-index
+          image: busybox
+          command: ["sh", "-c", "date > /html/index.html"]
+          volumeMounts: 
+            - name: html
+              mountPath: /html
+      volumes: 
+        - name: html
+          emptyDir: {}
+          
