@@ -20,11 +20,18 @@
 │   ├── nfs-storageclass.yml
 │   └── nfs-test-pod.yml
 ├── Other
+│   ├── busybox-secret.yml
+│   ├── busybox-use-secret.yml
+│   ├── cronjob.yml
+│   ├── job.yml
 │   ├── nginx-daemonset.yml
 │   ├── nginx-deployment.yml
 │   ├── nginx-pod.yml
 │   ├── nginx-replicaset.yml
-│   └── nginx-replicationcontroller.yml
+│   ├── nginx-replicationcontroller.yml
+│   ├── nginx-statefulset.yml
+│   ├── redis-configmap.yml
+│   └── redis-use-configmap.yml
 ├── Prometheus
 │   ├── grafana.yml
 │   ├── namespace-ingress-job.yml
@@ -35,5 +42,5 @@
 ├── README.md
 └── update-readme.sh
 
-6 directories, 28 files
+6 directories, 35 files
 ```
