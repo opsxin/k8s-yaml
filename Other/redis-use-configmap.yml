@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: redis-cm
+  namespace: k8s-yaml
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: redis
+  template:
+    metadata: 
+      labels: 
+        app: redis
+    spec: 
+      containers: 
+        - name: redis-cm
+          image: redis
+          # 自定义 EntryPoint
+          command: ["redis-server"]
+          # 自定义 Cmd，使用自己的配置文件
+          args: ["/usr/local/etc/redis/redis.conf"]
+          volumeMounts: 
+            - name: config
+              mountPath: /usr/local/etc/redis
+            - name: data
+              mountPath: /data
+          resources: 
+            limits:
+              memory: 200M
+              cpu: 100m
+            requests: 
+              memory: 100M
+              cpu: 50m
+      volumes:
+        - name: config
+          configMap: 
+            name: redis-cm
+        - name: data
+          emptyDir: {}

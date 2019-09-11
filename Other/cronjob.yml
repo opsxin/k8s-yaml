@@ -1,0 +1,16 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata: 
+  name: test-cronjob
+  namespace: k8s-yaml
+spec: 
+  schedule: "* * * * *"
+  jobTemplate: 
+    spec: 
+      template: 
+        spec: 
+          containers: 
+            - name: test-cronjob
+              image: busybox
+              command: ["sh", "-c", "date; echo 'hahaha'"]
+          restartPolicy: OnFailure
