@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: redis-cm
+  namespace: k8s-yaml
+data: 
+  redis.conf: |-
+    appendonly yes
+    port 6379
+    maxmemory 2mb
