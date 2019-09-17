@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: nginx-pv
+  namespace: k8s-yaml
+spec: 
+  containers: 
+    - name: nginx-pv
+      image: nginx
+      resources:
+        requests: 
+          memory: 100M
+          cpu: 50m
+        limits: 
+          memory: 150M
+          cpu: 100m
+      volumeMounts: 
+        - mountPath: /usr/share/nginx/html
+          name: nginx-pvc
+  volumes: 
+    - name: nginx-pvc
+      persistentVolumeClaim: 
+        claimName: pvc01
