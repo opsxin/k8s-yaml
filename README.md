@@ -27,9 +27,13 @@
 │   ├── nginx-daemonset.yml
 │   ├── nginx-deployment.yml
 │   ├── nginx-pod.yml
+│   ├── nginx-pv.yml
+│   ├── nginx-pvc.yml
 │   ├── nginx-replicaset.yml
 │   ├── nginx-replicationcontroller.yml
+│   ├── nginx-statefulset-pvc.yml
 │   ├── nginx-statefulset.yml
+│   ├── nginx-use-pvc.yml
 │   ├── redis-configmap.yml
 │   └── redis-use-configmap.yml
 ├── Prometheus
@@ -42,5 +46,5 @@
 ├── README.md
 └── update-readme.sh
 
-6 directories, 35 files
+6 directories, 39 files
 ```
