@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nginx
+  namespace: k8s-yaml
+spec:
+  serviceName: nginx
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "50m"
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: nginx-volume
+            mountPath: /usr/share/nginx/html
+  # 只有 StatefulSet 有这个字段
+  # 定义卷申明模板
+  volumeClaimTemplates:
+    - metadata:
+        name: nginx-volume
+      spec:
+        accessModes: 
+          - ReadWriteOnce
+        resources:
+          requests: 
+            storage: 10M
+        
