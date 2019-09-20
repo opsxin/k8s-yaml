@@ -1,50 +1,48 @@
-```bash
-.
-├── EFK
-│   ├── elasticsearch.yml
-│   ├── fluent-nginx-cm.yaml
-│   ├── fluent-nginx.yaml
-│   ├── fluent-rbac.yml
-│   └── kibana.yml
-├── Ingress-Nginx
-│   ├── configmap.yml
-│   ├── ingress-test-pod.yml
-│   ├── mandatory.yaml
-│   ├── namespace.yaml
-│   ├── prometheus-export-svc.yml
-│   ├── rbac.yaml
-│   └── with-rbac.yaml
-├── NFS-Client
-│   ├── nfs-client.yml
-│   ├── nfs-rbac.yml
-│   ├── nfs-storageclass.yml
-│   └── nfs-test-pod.yml
-├── Other
-│   ├── busybox-secret.yml
-│   ├── busybox-use-secret.yml
-│   ├── cronjob.yml
-│   ├── job.yml
-│   ├── nginx-daemonset.yml
-│   ├── nginx-deployment.yml
-│   ├── nginx-pod.yml
-│   ├── nginx-pv.yml
-│   ├── nginx-pvc.yml
-│   ├── nginx-replicaset.yml
-│   ├── nginx-replicationcontroller.yml
-│   ├── nginx-statefulset-pvc.yml
-│   ├── nginx-statefulset.yml
-│   ├── nginx-use-pvc.yml
-│   ├── redis-configmap.yml
-│   └── redis-use-configmap.yml
-├── Prometheus
-│   ├── grafana.yml
-│   ├── namespace-ingress-job.yml
-│   ├── prometheus.yml
-│   ├── rbac.yml
-│   └── redis-export
-│       └── redis-export.yml
-├── README.md
-└── update-readme.sh
-
-6 directories, 39 files
-```
+<h4>K8S-参考</h4>
+	├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/EFK/">EFK</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/EFK/elasticsearch.yml">elasticsearch.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/EFK/fluent-nginx-cm.yaml">fluent-nginx-cm.yaml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/EFK/fluent-nginx.yaml">fluent-nginx.yaml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/EFK/fluent-rbac.yml">fluent-rbac.yml</a><br>
+	│   └── <a href="https://github.com/opsxin/k8s-yaml/blob/master/EFK/kibana.yml">kibana.yml</a><br>
+	├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Ingress-Nginx/">Ingress-Nginx</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Ingress-Nginx/configmap.yml">configmap.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Ingress-Nginx/ingress-test-pod.yml">ingress-test-pod.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Ingress-Nginx/mandatory.yaml">mandatory.yaml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Ingress-Nginx/namespace.yaml">namespace.yaml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Ingress-Nginx/prometheus-export-svc.yml">prometheus-export-svc.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Ingress-Nginx/rbac.yaml">rbac.yaml</a><br>
+	│   └── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Ingress-Nginx/with-rbac.yaml">with-rbac.yaml</a><br>
+	├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/NFS-Client/">NFS-Client</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/NFS-Client/nfs-client.yml">nfs-client.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/NFS-Client/nfs-rbac.yml">nfs-rbac.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/NFS-Client/nfs-storageclass.yml">nfs-storageclass.yml</a><br>
+	│   └── <a href="https://github.com/opsxin/k8s-yaml/blob/master/NFS-Client/nfs-test-pod.yml">nfs-test-pod.yml</a><br>
+	├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/">Other</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/RBAC.yml">RBAC.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/busybox-secret.yml">busybox-secret.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/busybox-use-secret.yml">busybox-use-secret.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/cronjob.yml">cronjob.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/job.yml">job.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/nginx-daemonset.yml">nginx-daemonset.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/nginx-deployment.yml">nginx-deployment.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/nginx-pod.yml">nginx-pod.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/nginx-pv.yml">nginx-pv.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/nginx-pvc.yml">nginx-pvc.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/nginx-replicaset.yml">nginx-replicaset.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/nginx-replicationcontroller.yml">nginx-replicationcontroller.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/nginx-statefulset-pvc.yml">nginx-statefulset-pvc.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/nginx-statefulset.yml">nginx-statefulset.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/nginx-use-pvc.yml">nginx-use-pvc.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/redis-configmap.yml">redis-configmap.yml</a><br>
+	│   └── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Other/redis-use-configmap.yml">redis-use-configmap.yml</a><br>
+	├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Prometheus/">Prometheus</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Prometheus/grafana.yml">grafana.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Prometheus/namespace-ingress-job.yml">namespace-ingress-job.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Prometheus/prometheus.yml">prometheus.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Prometheus/rbac.yml">rbac.yml</a><br>
+	│   └── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Prometheus/redis-export/">redis-export</a><br>
+	│   &nbsp;&nbsp;&nbsp; └── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Prometheus/redis-export/redis-export.yml">redis-export.yml</a><br>
+	├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/README.md">README.md</a><br>
+	└── <a href="https://github.com/opsxin/k8s-yaml/blob/master/update-readme.sh">update-readme.sh</a><br>
+<br/>6 directories, 40 files
