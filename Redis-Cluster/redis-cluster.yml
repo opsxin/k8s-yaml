@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-cluster-cm
+  namespace: redis-cluster
+data:
+  redis.conf: |-
+    appendonly yes
+    cluster-enabled yes
+    cluster-config-file nodes.conf
+    cluster-node-timeout 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-cluster-svc
+  namespace: redis-cluster
+spec:
+  selector:
+    app: redis-cluster
+  ports:
+  - port: 6379
+  #   targetPort: redis-port
+  #   name: redis-port-svc
+  # - port: 16379
+  #   targetPort: cluster-port
+  #   name: cluster-port-svc
+  clusterIP: None
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-cluster
+  namespace: redis-cluster
+spec:
+  serviceName : redis-cluster
+  replicas: 6
+  selector:
+    matchLabels:
+      app: redis-cluster
+  template:
+    metadata:
+      labels:
+        app: redis-cluster
+    spec:
+      containers:
+      - name: redis-cluster
+        image: redis
+        command: ["redis-server"]
+        args: ["/usr/local/etc/redis/redis.conf"]
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "50m"
+        volumeMounts:
+          - name: cluster-cm
+            mountPath: /usr/local/etc/redis
+        ports:
+        - containerPort: 6379
+          name: redis-port
+        # 集群节点之间健康检查等功能
+        - containerPort: 16379
+          name: cluster-port
+      volumes:
+        - name: cluster-cm
+          configMap:
+              name: redis-cluster-cm
+  volumeClaimTemplates:
+    - metadata:  
+        name: cluster-pv 
+        annotations:
+          volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 30Mi 
