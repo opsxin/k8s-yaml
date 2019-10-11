@@ -44,5 +44,9 @@
 	│   └── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Prometheus/redis-export/">redis-export</a><br>
 	│   &nbsp;&nbsp;&nbsp; └── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Prometheus/redis-export/redis-export.yml">redis-export.yml</a><br>
 	├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/README.md">README.md</a><br>
+	├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Redis-Cluster/">Redis-Cluster</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Redis-Cluster/redis-cluster.yml">redis-cluster.yml</a><br>
+	│   ├── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Redis-Cluster/redis-namespace.yml">redis-namespace.yml</a><br>
+	│   └── <a href="https://github.com/opsxin/k8s-yaml/blob/master/Redis-Cluster/redis-standalone.yml">redis-standalone.yml</a><br>
 	└── <a href="https://github.com/opsxin/k8s-yaml/blob/master/update-readme.sh">update-readme.sh</a><br>
-<br/>6 directories, 40 files
+<br/>7 directories, 43 files
