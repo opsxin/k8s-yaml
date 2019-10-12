@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  namespace: cicd
+spec:
+  serviceName: redis-svc
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 6379
+          name: redis-port
+        volumeMounts:
+          - name: redis-pvc
+            mountPath: /data
+  volumeClaimTemplate: 
+    - metadata:
+        annotations: 
+          volume.beta.kubernetes.io/storage-class: managed-nfs-storage
+        labels:
+          app: redis
+        name: reids-pvc
+      spec:
+        accessModes: 
+          - ReadWriteOnce
+        resources:
+          requests: 
+            storage: 20M
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-svc
+  namespace: cicd
+spec:
+  selector:
+    app: myapp
+  ports:
+  - port: 6379
+    targetPort: redis-port
