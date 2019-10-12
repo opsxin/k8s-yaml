@@ -59,6 +59,8 @@ spec:
   - port: 80
     targetPort: web-port
     nodePort: 30080
+    name: web
   - port: 22
     targetPort: ssh-port
     nodePort: 30022
+    name: ssh
