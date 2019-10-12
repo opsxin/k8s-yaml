@@ -54,12 +54,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nexus
+  name: nexus-svc
   namespace: cicd
 spec:
   selector:
     app: nexus
-  clusterIP: None
+  type: NodePort
   ports:
   - port: 8081
     targetPort: nexus-port
+    nodePort: 30181
