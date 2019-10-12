@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nexus
+  namespace: cicd
+spec:
+  serviceName: nexus-svc
+  selector:
+    matchLabels:
+      app: nexus
+  template:
+    metadata:
+      labels:
+        app: nexus
+    spec:
+      containers:
+      - name: nexus
+        image: sonatype/nexus3
+        env:
+          - name: "INSTALL4J_ADD_VM_PARAMS"
+            value: "-Xms1g -Xmx1g"
+        resources:
+          limits:
+            memory: "1G"
+            cpu: "500m"
+        ports:
+        - containerPort: 8081
+          name: nexus-port
+        volumeMounts:
+          - name: nexus-pvc
+            mountPath: /nexus-data
+      initContainers: 
+        - name: change-user
+          image: busybox
+          command: ["sh", "-c", "chown -R 200 /data"]
+          volumeMounts:
+            - name: nexus-pvc
+              mountPath: /data
+    volumeClaimTemplates:
+    - metadata:
+        annotations: 
+          volume.beta.kubernetes.io/storage-class: managed-nfs-storage
+        labels:
+          app: nexus
+        name: nexus-pvc
+      spec:
+        accessModes: 
+          - ReadWriteOnce
+        resources:
+          requests: 
+            storage: 50M
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nexus
+  namespace: cicd
+spec:
+  selector:
+    app: nexus
+  clusterIP: None
+  ports:
+  - port: 8081
+    targetPort: nexus-port

@@ -1,3 +1,5 @@
+# production logs
+# /var/log/gitlab/gitlab-rails/production.log
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -44,6 +46,22 @@ spec:
           name: web-port
         - containerPort: 22
           name: ssh-port
+        volumeMounts:
+          - name: gitlab-pvc
+            mountPath: /var/opt/gitlab
+  volumeClaimTemplates:
+    - metadata:
+        annotations: 
+          volume.beta.kubernetes.io/storage-class: managed-nfs-storage
+        labels:
+          app: gitlab
+        name: gitlab-pvc
+      spec:
+        accessModes: 
+          - ReadWriteOnce
+        resources:
+          requests: 
+            storage: 50M
 
 ---
 apiVersion: v1
@@ -58,7 +76,7 @@ spec:
   ports:
   - port: 80
     targetPort: web-port
-    # 修改，和 Ingress-nginx 冲突
+    # 修改，30080 和 Ingress-nginx 冲突
     nodePort: 30180
     name: web
   - port: 22
