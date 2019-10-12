@@ -36,19 +36,19 @@ spec:
           volumeMounts:
             - name: nexus-pvc
               mountPath: /data
-    volumeClaimTemplates:
-      - metadata:
-          annotations: 
-            volume.beta.kubernetes.io/storage-class: managed-nfs-storage
-          labels:
-            app: nexus
-          name: nexus-pvc
-        spec:
-          accessModes: 
-            - ReadWriteOnce
-          resources:
-            requests: 
-              storage: 50M
+  volumeClaimTemplates:
+    - metadata:
+        annotations: 
+          volume.beta.kubernetes.io/storage-class: managed-nfs-storage
+        labels:
+          app: nexus
+        name: nexus-pvc
+      spec:
+        accessModes: 
+          - ReadWriteOnce
+        resources:
+          requests: 
+            storage: 50M
 
 ---
 apiVersion: v1
