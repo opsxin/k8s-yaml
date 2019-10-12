@@ -35,7 +35,7 @@ metadata:
   name: redis-cluster
   namespace: redis-cluster
 spec:
-  serviceName : redis-cluster
+  serviceName : redis-cluster-svc
   replicas: 6
   selector:
     matchLabels:
