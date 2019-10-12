@@ -32,7 +32,7 @@ spec:
           volume.beta.kubernetes.io/storage-class: managed-nfs-storage
         labels:
           app: redis
-        name: reids-pvc
+        name: redis-pvc
       spec:
         accessModes: 
           - ReadWriteOnce
