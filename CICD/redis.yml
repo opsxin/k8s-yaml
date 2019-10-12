@@ -48,7 +48,8 @@ metadata:
   namespace: cicd
 spec:
   selector:
-    app: myapp
+    app: redis
+  clusterIP: None
   ports:
   - port: 6379
     targetPort: redis-port

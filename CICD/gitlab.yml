@@ -56,7 +56,7 @@ spec:
     app: gitlab
   type: NodePort
   ports:
-  - port: 30180
+  - port: 80
     targetPort: web-port
     # 修改，和 Ingress-nginx 冲突
     nodePort: 30180
