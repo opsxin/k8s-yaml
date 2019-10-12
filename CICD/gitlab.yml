@@ -30,17 +30,17 @@ spec:
               redis['enable'] = false
               gitlab_rails['redis_host'] = 'redis-svc'
               gitlab_rails['redis_port'] = '6379'
-              gitlab_rails['gitlab_shell_ssh_port'] = 30022
-              external_url 'http://35.229.134.236:30080'
+              gitlab_rails['gitlab_shell_ssh_port'] = 30122
+              external_url 'http://35.229.134.236:30180'
         resources:
           requests:
-            memory: "500M"
-            cpu: "500m"  
+            memory: "1G"
+            cpu: "1000m"  
           limits:
-            memory: "1Gi"
-            cpu: "500m"
+            memory: "2Gi"
+            cpu: "2000m"
         ports:
-        - containerPort: 80
+        - containerPort: 30180
           name: web-port
         - containerPort: 22
           name: ssh-port
@@ -56,11 +56,12 @@ spec:
     app: gitlab
   type: NodePort
   ports:
-  - port: 80
+  - port: 30180
     targetPort: web-port
-    nodePort: 30080
+    # 修改，和 Ingress-nginx 冲突
+    nodePort: 30180
     name: web
   - port: 22
     targetPort: ssh-port
-    nodePort: 30022
+    nodePort: 30122
     name: ssh
