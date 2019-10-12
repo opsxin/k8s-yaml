@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: cicd
+  annotations:
+    cicdVersion: "v1.0"
+spec:
+  serviceName: pg-svc
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres
+        env:
+          - name: POSTGRES_USER
+            value: gitlab
+          - name: POSTGRES_DB
+            value: gitlab_prod
+          - name: POSTGRES_PASSWORD
+            value: gitlab
+        resources:
+          requests:
+            memory: "128M"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        ports:
+        - containerPort: 5432
+          name: postgres-port
+        volumeMounts: 
+          - name: pg-pvc
+            mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates: 
+    - metadata:
+        annotations: 
+          volume.beta.kubernetes.io/storage-class: managed-nfs-storage
+        labels:
+          app: postgres
+        name: pg-pvc
+      spec:
+        accessModes: 
+          - ReadWriteOnce
+        resources:
+          requests: 
+            storage: 20M
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pg-svc
+  namespace: cicd 
+spec:
+  selector:
+    app: postgres
+  clusterIP: None
+  ports:
+  - port: 5432
+    targetPort: postgres-port
